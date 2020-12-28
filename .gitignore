@@ -1,0 +1,40 @@
+### Python ###
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.pyc
+# C extensions
+*.so
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
+
+### Django ###
+*.log
+*.log.*
+*.pot
+
+.env
+db.sqlite3
+.idea
+backend/calyx_files
+*/*__pycache__/*.pyc
+.vscode
+
+
+*.pdf
+static
+
+.isort.cfg
+
+app.env.local
+logs
+certificates
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
