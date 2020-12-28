@@ -1,0 +1,51 @@
+{
+  "id": "9t9a-428c-e6d0",
+  "name": "craigslist cars",
+  "domain": "https://craigslist.org",
+  "javascript": false,
+  "is_detail_page": false,
+
+  "listing_page": {
+    "selectors": {
+      "xpath": [
+        "//ul[@class=\"rows\"]/li/a"
+      ],
+      "extract": "@href"
+    },
+    "pagination": {
+      "_comment": "We will have different types of pagination",
+      "next_page": {
+        "xpath": [
+          "//div[@class=\"search-legend\"]//a[@title=\"next page\"]/@href"
+        ]
+      }
+    }
+  },
+
+
+  "detail_page": {
+    "fields": [
+      {
+        "name": "title",
+        "selectors": {
+          "xpath": [
+            "//div[@class=\"well\"]//h1"
+          ],
+          "extract": "text()"
+        },
+        "action": "click"
+      },
+      {
+        "name": "phone_number",
+        "selectors": {
+          "regex": [
+            "\\d{3}[\\.\\-\\s]+\\d{3}[\\.\\-\\s]+\\d{4}",
+            "[(][\\d]{3}[)][ ]?[\\d]{3}-[\\d]{4}"
+          ]
+        }
+      }
+    ]
+  }
+}
+
+
