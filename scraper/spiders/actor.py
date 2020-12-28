@@ -41,6 +41,13 @@ class ActorSpider(scrapy.Spider):
                     yield response.follow(nextpage, callback=self.parse, headers=self.headers)
 
     def parse_detail_page(self, response):
-        yield {
-            'link': response.url
-        }
+        data = {}
+        fields = self.config.get('detail_page').get('fields')
+
+        for field in fields:
+            key = field.get('name')
+            xpath = field.get('selectors').get('xpath')[0] + '/' + field.get('selectors').get('extract')
+            value = response.xpath(xpath).get()
+            data.update({key: value})
+
+        yield data
