@@ -36,8 +36,8 @@ class ActorSpider(scrapy.Spider):
             # pagination
             next_page = self.config.get('listing_page').get('pagination').get('next_page')
             if next_page:
-                nextpage = response.xpath(next_page.get('xpath')[0] + '/' + next_page.get('extract')).get()
-                if next:
+                nextpage = response.xpath(next_page.get('xpath')[0]).get()
+                if nextpage:
                     yield response.follow(nextpage, callback=self.parse, headers=self.headers)
 
     def parse_detail_page(self, response):

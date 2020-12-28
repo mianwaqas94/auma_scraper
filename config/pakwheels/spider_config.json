@@ -16,9 +16,8 @@
       "_comment": "We will have different types of pagination",
       "next_page": {
         "xpath": [
-          "//li[@class = \"next_page\"]/a"
-        ],
-        "extract": "@href"
+          "//li[@class = \"next_page\"]/a/@href"
+        ]
       }
     }
   },
