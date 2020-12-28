@@ -1,0 +1,4 @@
+Proxy-List-Scrapper==0.1.6
+pymongo==3.11.2
+Scrapy==2.4.1
+scrapy-rotating-proxies==0.6.2

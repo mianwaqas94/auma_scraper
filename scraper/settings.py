@@ -48,11 +48,16 @@ ROBOTSTXT_OBEY = True
 #    'scraper.middlewares.ScraperSpiderMiddleware': 543,
 #}
 
+ROTATING_PROXY_LIST_PATH = 'proxy_rotation/proxies.txt'
+
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'scraper.middlewares.ScraperDownloaderMiddleware': 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+    # 'scraper.middlewares.ScraperDownloaderMiddleware': 543,
+
+    # 'rotating_proxies.middlewares.RotatingProxyMiddleware': 800,
+    # 'rotating_proxies.middlewares.BanDetectionMiddleware': 800,
+}
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
