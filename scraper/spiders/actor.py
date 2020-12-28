@@ -49,8 +49,6 @@ class ActorSpider(scrapy.Spider):
             key = field.get('name')
             if field.get('selectors').get('regex'):
                 value = re.findall(field.get('selectors').get('regex')[0], response.text)
-                if not value:
-                    value = re.findall(field.get('selectors').get('regex')[1], response.text)
             else:
                 xpath = field.get('selectors').get('xpath')[0] + '/' + field.get('selectors').get('extract')
                 value = response.xpath(xpath).get()
