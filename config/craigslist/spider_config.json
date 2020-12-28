@@ -29,18 +29,17 @@
         "name": "title",
         "selectors": {
           "xpath": [
-            "//div[@class=\"well\"]//h1"
+            "//span[@id=\"titletextonly\"]"
           ],
           "extract": "text()"
-        },
-        "action": "click"
+        }
       },
       {
         "name": "phone_number",
         "selectors": {
           "regex": [
             "\\d{3}[\\.\\-\\s]+\\d{3}[\\.\\-\\s]+\\d{4}",
-            "[(][\d]{3}[)][ ]?[\d]{3}-[\d]{4}"
+            "[(][\\d]{3}[)][ ]?[\\d]{3}-[\\d]{4}"
           ]
         }
       }
