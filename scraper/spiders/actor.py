@@ -20,9 +20,10 @@ class ActorSpider(scrapy.Spider):
         super(ActorSpider, self).__init__(*args, **kwargs)
 
     def start_requests(self):
-        yield scrapy.Request(url='https://www.pakwheels.com/used-cars/search/-/featured_1/',
-                             callback=self.parse,
-                             headers=self.headers)
+        yield scrapy.Request(
+            url='https://sacramento.craigslist.org/search/cto?postedToday=1&bundleDuplicates=1&searchNearby=2&nearbyArea=63&nearbyArea=187&nearbyArea=43&nearbyArea=373&nearbyArea=709&nearbyArea=189&nearbyArea=675&nearbyArea=216&nearbyArea=454&nearbyArea=285&nearbyArea=96&nearbyArea=102&nearbyArea=188&nearbyArea=92&nearbyArea=191&nearbyArea=62&nearbyArea=710&nearbyArea=1&nearbyArea=708&nearbyArea=97&nearbyArea=707&nearbyArea=346&nearbyArea=456&min_price=2000&min_auto_year=1980',
+            callback=self.parse,
+            headers=self.headers)
 
     def parse(self, response):
         if self.config.get('listing_page'):
@@ -41,13 +42,18 @@ class ActorSpider(scrapy.Spider):
                     yield response.follow(nextpage, callback=self.parse, headers=self.headers)
 
     def parse_detail_page(self, response):
-        data = {}
+        data = {'url': response.url}
         fields = self.config.get('detail_page').get('fields')
 
         for field in fields:
             key = field.get('name')
-            xpath = field.get('selectors').get('xpath')[0] + '/' + field.get('selectors').get('extract')
-            value = response.xpath(xpath).get()
+            if field.get('selectors').get('regex'):
+                value = re.findall(field.get('selectors').get('regex')[0], response.text)
+                if not value:
+                    value = re.findall(field.get('selectors').get('regex')[1], response.text)
+            else:
+                xpath = field.get('selectors').get('xpath')[0] + '/' + field.get('selectors').get('extract')
+                value = response.xpath(xpath).get()
             data.update({key: value})
 
         yield data

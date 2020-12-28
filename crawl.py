@@ -15,5 +15,5 @@ c = CrawlerProcess({
     'FEED_FORMAT': 'json',
     'FEED_URI': 'output.json'
 })
-c.crawl(ActorSpider, "asfdfd", "config/pakwheels/spider_config.json")
+c.crawl(ActorSpider, "asfdfd", "config/craigslist/spider_config.json")
 c.start()
