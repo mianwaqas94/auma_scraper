@@ -95,11 +95,22 @@ class CrutchfieldSpider(SitemapSpider):
         q_and_a_array = []
 
         for q_a in q_and_a:
-            answers = q_a.xpath('.//div[@class="answer-block"]/text()[1]').getall()
-            answers = [ans.strip() for ans in answers]
+            question = {
+                'text': (q_a.xpath('.//a//div[@class="question-symbol"]/following-sibling::text()[1]').get()).strip(),
+                'user_and_date': q_a.xpath('.//a//div[@class="question-symbol"]/following-sibling::text()[1]/following-sibling::div/text()').get()
+
+            }
+            answers = []
+            answers_blocks = q_a.xpath('.//div[@class="answer-block"]')
+
+            for block in answers_blocks:
+                answers.append({
+                    'text': (block.xpath('./text()[1]').get()).strip(),
+                    'user_and_date': block.xpath('./text()[1]/following-sibling::div/text()').get()
+                })
+
             q_and_a_array.append({
-                'question': (
-                    q_a.xpath('.//a//div[@class="question-symbol"]/following-sibling::text()[1]').get()).strip(),
+                'question': question,
                 'answers': answers,
             })
 
