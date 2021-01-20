@@ -31,7 +31,23 @@ class CrutchfieldSpider(SitemapSpider):
         sub_title = response.xpath('//h2[@class="prod-sub-title"]/text()').get()
         categories = response.xpath('//ol[@class="breadcrumb"]/li/a/text()').getall()
         vendor = response.xpath('(//img[@class="img-fluid"])[1]/@alt').get()
-        price = ''.join(response.xpath('(//div[@class="price js-price"])[1]/text()').getall())
+        original_price = response.xpath('(//div[@class="product-pricing js-productPricing"])[1]//span[@class="original-price"]/text()').getall()
+        price = response.xpath('(//div[@class="product-pricing js-productPricing"])[1]//div[@class="price js-price"]//text()').getall()
+
+        regular_price = None
+        sale_price = None
+
+        if not original_price and not price:
+            regular_price = None
+            sale_price = None
+
+        elif original_price and price:
+            regular_price = ''.join(original_price)
+            sale_price = ''.join(price)
+
+        elif price and not sale_price:
+            regular_price = ''.join(price)
+
         tags = response.xpath('//div[@class="related-searches-scroll"]/a/text()').getall()
         in_stock = response.xpath('(//div[@class="stock-eta-desc"])[1]/span/text()').get()
         images_urls = response.xpath('//div[@id="js-productThumbCarousel"]/button/img/@data-src').getall()
@@ -69,7 +85,8 @@ class CrutchfieldSpider(SitemapSpider):
             'sub_title': sub_title,
             'categories': categories,
             'vendor': vendor,
-            'price': price.strip(),
+            'regular_price': regular_price.strip() if regular_price else None,
+            'sale_price': sale_price.strip() if sale_price else None,
             'tags': tags,
             'in_stock': in_stock,
             'images_urls': images_urls,
