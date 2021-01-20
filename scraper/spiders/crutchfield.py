@@ -62,7 +62,23 @@ class CrutchfieldSpider(SitemapSpider):
         images_urls = [url.replace('//', '').replace('fixedscale/90/90', 'trim/620/378') for url in images_urls]
         overview_about = (''.join(response.xpath('//div[@class="row our-take"]//text()').getall())).replace('READ LESS', '')
         overview_about_raw_html = response.xpath('//div[@class="row our-take"]//*').get()
-        overview_highlights = response.xpath('//div[@class="highlight-wrapper"]//li/text()').getall()
+
+        overview_highlights = []
+        h2_heading = response.xpath('//div[@class="highlight-wrapper"]/h2/text()').get()
+        h2_points = response.xpath('//div[@class="highlight-wrapper"]/h2/following-sibling::ul[1]//text()').getall()
+        overview_highlights.append({
+            'heading': h2_heading,
+            'points': h2_points
+        })
+
+        h5_headings = response.xpath('//div[@class="highlight-wrapper"]/h5')
+
+        for h in h5_headings:
+            overview_highlights.append({
+                'heading': h.xpath('./text()').get(),
+                'points': h.xpath('./following-sibling::ul[1]//text()').getall()
+            })
+
         overview_highlights_raw_html = response.xpath('//div[@id="hightlightWrapper"]//*').get()
         overview_whatsintheBox = response.xpath('//div[@class="whatsInTheBox sideBlock"]//li/text()').getall()
         overview_whatsintheBox_raw_html = response.xpath('//div[@class="col-12 col-lg-5 whats-in-the-box"]//*').get()
