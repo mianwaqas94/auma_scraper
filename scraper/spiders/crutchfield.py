@@ -114,7 +114,7 @@ class CrutchfieldSpider(SitemapSpider):
             'in_stock': in_stock,
             'images_urls': images_urls,
             'overview_about': overview_about.strip(),
-            'overview_about_html': overview_about_raw_html,
+            'overview_about_raw_html': overview_about_raw_html,
             'overview_highlights': overview_highlights,
             'overview_highlights_raw_html': overview_highlights_raw_html,
             'overview_whatsintheBox': overview_whatsintheBox,
