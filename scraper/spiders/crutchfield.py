@@ -60,7 +60,7 @@ class CrutchfieldSpider(SitemapSpider):
         images_urls = response.xpath('//div[@id="js-productThumbCarousel"]/button/img/@data-src').getall()
 
         images_urls = [url.replace('//', '').replace('fixedscale/90/90', 'trim/620/378') for url in images_urls]
-        overview_about = ''.join(response.xpath('//div[@class="row our-take"]//text()').getall())
+        overview_about = (''.join(response.xpath('//div[@class="row our-take"]//text()').getall())).replace('READ LESS', '')
         overview_about_raw_html = response.xpath('//div[@class="row our-take"]//*').get()
         overview_highlights = response.xpath('//div[@class="highlight-wrapper"]//li/text()').getall()
         overview_highlights_raw_html = response.xpath('//div[@id="hightlightWrapper"]//*').get()
