@@ -38,8 +38,11 @@ class CrutchfieldSpider(SitemapSpider):
 
         images_urls = [url.replace('//', '').replace('fixedscale/90/90', 'trim/620/378') for url in images_urls]
         overview_about = ''.join(response.xpath('//div[@class="row our-take"]//text()').getall())
+        overview_about_raw_html = response.xpath('//div[@class="row our-take"]//*').get()
         overview_highlights = response.xpath('//div[@class="highlight-wrapper"]//li/text()').getall()
+        overview_highlights_raw_html = response.xpath('//div[@id="hightlightWrapper"]//*').get()
         overview_whatsintheBox = response.xpath('//div[@class="whatsInTheBox sideBlock"]//li/text()').getall()
+        overview_whatsintheBox_raw_html = response.xpath('//div[@class="col-12 col-lg-5 whats-in-the-box"]//*').get()
 
         features = response.xpath('//div[@id="SpecsWrapper"]//tbody/tr')
         detail_features = {}
@@ -71,8 +74,11 @@ class CrutchfieldSpider(SitemapSpider):
             'in_stock': in_stock,
             'images_urls': images_urls,
             'overview_about': overview_about.strip(),
+            'overview_about_html': overview_about_raw_html,
             'overview_highlights': overview_highlights,
+            'overview_highlights_raw_html': overview_highlights_raw_html,
             'overview_whatsintheBox': overview_whatsintheBox,
+            'overview_whatsintheBox_raw_html': overview_whatsintheBox_raw_html,
             'detail_features': detail_features,
             'q_and_a': q_and_a_array,
             'reviews_average': avg_rating,
