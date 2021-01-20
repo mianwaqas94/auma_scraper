@@ -49,7 +49,14 @@ class CrutchfieldSpider(SitemapSpider):
             regular_price = ''.join(price)
 
         tags = response.xpath('//div[@class="related-searches-scroll"]/a/text()').getall()
-        in_stock = response.xpath('(//div[@class="stock-eta-desc"])[1]/span/text()').get()
+        stock_description = response.xpath('(//div[@class="stock-eta-desc"])[1]/span/text()').get()
+
+        in_stock = False
+        if not stock_description:
+            in_stock = False
+        elif stock_description == 'In stock' or stock_description == 'Low stock':
+            in_stock = True
+
         images_urls = response.xpath('//div[@id="js-productThumbCarousel"]/button/img/@data-src').getall()
 
         images_urls = [url.replace('//', '').replace('fixedscale/90/90', 'trim/620/378') for url in images_urls]
