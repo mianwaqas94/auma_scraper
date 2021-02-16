@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
 from scrapy.spiders import Spider
+import re
 
 
 class AppstoreSpider(Spider):
@@ -39,6 +40,7 @@ class AppstoreSpider(Spider):
 
         # List of all names in the app store
         name = response.xpath('//h1[@class="product-header__title app-header__title"]/text()').extract_first().strip()
+        seller_link = response.xpath('//h2[@class="product-header__identity app-header__identity"]/a/@href').get()
         rows = response.xpath('//div[@class="information-list__item l-row"]')
 
         info_dict = {'app_url': response.url, 'title': name}
@@ -57,9 +59,22 @@ class AppstoreSpider(Spider):
                 continue
 
             info_dict.update({key: value})
+            if key == 'Seller':
+                info_dict.update({'Seller Link': seller_link})
 
         info_dict['Category'] = rows[2].xpath('./dd/a/text()').extract_first().strip()
         info_dict['Compatibility'] = rows[3].xpath('./dd//p/text()').extract_first().strip()
         info_dict['Languages'] = rows[4].xpath('./dd//p/text()').extract_first()
 
+        review_count = None
+        review_count_raw = re.search('reviewCount":(.*)},', response.text)
+        if review_count_raw:
+            review_count = review_count_raw.group(1)
+
+        rating_value = None
+        rating_value_raw = re.search('ratingValue":(.*),"reviewCount', response.text)
+        if rating_value_raw:
+            rating_value = rating_value_raw.group(1)
+
+        info_dict.update({'review count': review_count, 'rating value': rating_value})
         yield info_dict
