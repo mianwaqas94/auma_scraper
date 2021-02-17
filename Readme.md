@@ -12,7 +12,11 @@ To be able to run **crawler** locally you have to meet following dependencies:
 - Switch to the project root directory.
 - run `$ pip3 install -r requirements.txt`
 
-## 2. Run the spider:
-- Switch to the project root directory.
-- run `scrapy crawl crutchfield`
+### 4. Run the crawler
+- Switch to project root directory.
+- run command to run the script `python3 run_scraper.py -u <category url>`
+- example run
+    - `python3 run_scraper.py -u https://apps.apple.com/us/genre/ios-books/id6018`
+
+
 

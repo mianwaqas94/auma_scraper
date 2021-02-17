@@ -14,18 +14,22 @@ class AppstoreSpider(Spider):
         """
         This method initializes spiders with start url
         """
-        self.cat_url = cat_url
+        characters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
+                      'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '*']
+        # making urls for each character
+        self.a_to_z_urls = [f'{cat_url}?letter={c}' for c in characters]
+
         super(AppstoreSpider, self).__init__(*args, **kwargs)
 
     def start_requests(self):
         """
         This method yields the start url
         """
-
-        yield scrapy.Request(
-            url=self.cat_url,
-            callback=self.parse,
-            headers=self.headers)
+        for url in self.a_to_z_urls:
+            yield scrapy.Request(
+                url=url,
+                callback=self.parse,
+                headers=self.headers)
 
     def parse(self, response):
         """
@@ -34,7 +38,12 @@ class AppstoreSpider(Spider):
         urls = response.xpath('//div[@id="selectedcontent"]//li/a/@href').extract()
 
         for url in urls:
-            yield scrapy.Request(url=url, callback=self.parse_page)
+            yield scrapy.Request(url=url, callback=self.parse_page, headers=self.headers)
+
+        # pagination
+        next_page = response.xpath('//ul[@class="list paginate"][1]//li/a[text()="Next"]/@href').get()
+        if next_page:
+            yield response.follow(next_page, callback=self.parse, headers=self.headers)
 
     def parse_page(self, response):
 

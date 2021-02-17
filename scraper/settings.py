@@ -30,7 +30,7 @@ FEED_URI = "output/apps--" + datetime.datetime.now().strftime("%Y-%m-%d--%H-%M-%
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 1.58
+DOWNLOAD_DELAY = 1.34
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
