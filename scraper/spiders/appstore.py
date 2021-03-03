@@ -50,7 +50,7 @@ class AppstoreSpider(Spider):
         # List of all names in the app store
         name = response.xpath('//h1[@class="product-header__title app-header__title"]/text()').extract_first().strip()
         seller_link = response.xpath('//h2[@class="product-header__identity app-header__identity"]/a/@href').get()
-        rows = response.xpath('//div[@class="information-list__item l-row"]')
+        rows = response.xpath('//div[contains(@class,"information-list__item")]')
 
         info_dict = {'app_url': response.url, 'title': name}
 
@@ -71,9 +71,11 @@ class AppstoreSpider(Spider):
             if key == 'Seller':
                 info_dict.update({'Seller Link': seller_link})
 
-        info_dict['Category'] = rows[2].xpath('./dd/a/text()').extract_first().strip()
-        info_dict['Compatibility'] = rows[3].xpath('./dd//p/text()').extract_first().strip()
-        info_dict['Languages'] = rows[4].xpath('./dd//p/text()').extract_first()
+        category = response.xpath('//div[contains(@class,"information-list__item")]/dt[text()="Category"]/following-sibling::dd/a/text()').getall()
+        info_dict['Category'] = ''.join(category)
+        compatibility = response.xpath('//div[contains(@class,"information-list__item")]/dt[text()="Compatibility"]/following-sibling::dd/dl//text()').getall()
+        info_dict['Compatibility'] = ''.join(compatibility)
+        info_dict['Languages'] = response.xpath('//div[contains(@class,"information-list__item")]/dt[text()="Languages"]/following-sibling::dd//p/text()').get()
 
         review_count = None
         review_count_raw = re.search('reviewCount":(.*)},', response.text)
