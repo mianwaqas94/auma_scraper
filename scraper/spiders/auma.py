@@ -96,4 +96,25 @@ class AumaSpider(Spider):
                     key: value
                 })
 
+        exhibitors_profile = response.xpath('//div[contains(@class,"accordion detail-view")]//h5[contains(text(), "Exhibitors profile")]/parent::div/following-sibling::div//text()').getall()
+        if exhibitors_profile:
+            exhibitors_profile = ', '.join(exhibitors_profile)
+        else:
+            exhibitors_profile = None
+
+        proportion_of_trade_visitors = response.xpath('//strong[text()="Proportion of trade visitors"]/following-sibling::span/text()').get()
+        distance_to_home = response.xpath('//span[text()="Distance to home (%)"]/following-sibling::ul/li/text()')
+        distance_to_home_json = {}
+
+        for dist in distance_to_home:
+            distance_to_home_json.update({
+                dist.get(): dist.xpath('./following-sibling::span/text()').get()
+            })
+
+        record.update({
+            'exhibitors_profile': exhibitors_profile,
+            'proportion_of_trade_visitors': proportion_of_trade_visitors,
+            'distance_to_home': distance_to_home_json
+        })
+
         yield record
