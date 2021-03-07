@@ -11,7 +11,7 @@ class AumaSpider(Spider):
         """
         This method initializes spiders with start urls
         """
-        self.urls = urls,
+        self.urls = urls
         self.headers = headers
 
         super(AumaSpider, self).__init__(*args, **kwargs)
@@ -30,3 +30,14 @@ class AumaSpider(Spider):
         """
         This method gets each exhibitionn url, parse the web page and yield the required data
         """
+        record = {
+            'url': response.url
+        }
+
+        title = response.xpath('//h1[@id="tradeFairTitel"]/text()').get()
+
+        record.update({
+            'title': title
+        })
+
+        yield record
