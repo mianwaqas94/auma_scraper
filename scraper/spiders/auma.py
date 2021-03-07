@@ -35,9 +35,33 @@ class AumaSpider(Spider):
         }
 
         title = response.xpath('//h1[@id="tradeFairTitel"]/text()').get()
+        venue = response.xpath('//article//div[@class="item"]/h4//*[contains(text(),"Venue")]/parent::h4/following-sibling::span/text()').getall()
+        dates_all = response.xpath('//article//div[@class="item"]/h4//*[contains(text(),"Dates")]/parent::h4/parent::div//span//text()').getall()
+        dates = []
+        remove_to_be = ['Interval', 'founded', 'digital']
+        for date in dates_all:
+            if any(r in date for r in remove_to_be):
+                pass
+            else:
+                dates.append(date)
+
+        interval_raw = response.xpath('//article//div[@class="item"]/h4//*[contains(text(),"Dates")]/parent::h4/parent::div//span[contains(text(),"Interval:")]/text()').get()
+        if interval_raw:
+            interval = interval_raw.replace('Interval: ', '')
+        else:
+            interval = None
+        founded_in_raw = response.xpath('//article//div[@class="item"]/h4//*[contains(text(),"Dates")]/parent::h4/parent::div//span[contains(text(),"founded in:")]/text()').get()
+        if founded_in_raw:
+            founded_in = founded_in_raw.replace('founded in: ', '')
+        else:
+            founded_in = None
 
         record.update({
-            'title': title
+            'title': title,
+            'venue': venue,
+            'dates': dates,
+            'interval': interval,
+            'founded_in': founded_in
         })
 
         yield record
