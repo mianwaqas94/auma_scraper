@@ -56,12 +56,26 @@ class AumaSpider(Spider):
         else:
             founded_in = None
 
+        organiser = response.xpath('//article//div[@class="item"]/h4[contains(text(),"Organiser")]/following-sibling::div/div[1]//text()').getall()
+        project_team = response.xpath('//article//div[@class="item"]/h4[contains(text(),"Organiser")]/following-sibling::div/div[2]//text()').getall()
+
         record.update({
             'title': title,
             'venue': venue,
             'dates': dates,
             'interval': interval,
-            'founded_in': founded_in
+            'founded_in': founded_in,
+            'organiser': organiser,
+            'project_team': project_team
         })
+
+        side_list = response.xpath('//div[contains(@class, "sidelist")]//div[contains(@class, "info-list")]/div')
+        for section in side_list:
+            key = section.xpath('./strong/text()').get()
+            value = ', '.join(section.xpath('./span//text()').getall())
+
+            record.update({
+                key: value
+            })
 
         yield record
