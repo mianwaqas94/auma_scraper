@@ -103,12 +103,12 @@ class AumaSpider(Spider):
             exhibitors_profile = None
 
         proportion_of_trade_visitors = response.xpath('//strong[text()="Proportion of trade visitors"]/following-sibling::span/text()').get()
-        distance_to_home = response.xpath('//span[text()="Distance to home (%)"]/following-sibling::ul/li/text()')
+        distance_to_home = response.xpath('//span[text()="Distance to home (%)"]/following-sibling::ul/li')
         distance_to_home_json = {}
 
         for dist in distance_to_home:
             distance_to_home_json.update({
-                dist.get(): dist.xpath('./following-sibling::span/text()').get()
+                dist.xpath('./text()').get(): dist.xpath('./span/text()').get()
             })
 
         record.update({
