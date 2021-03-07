@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import scrapy
 from scrapy.spiders import Spider
-import re
 
 
 class AumaSpider(Spider):
@@ -83,6 +82,12 @@ class AumaSpider(Spider):
         for stat in statistics:
             name = stat.xpath('./td[contains(@data-label,"Kennzah")]/text()').get()
             dates = stat.xpath('./td[contains(@data-label,"/")]')
+
+            if name == 'domestic':
+                name = stat.xpath('./preceding-sibling::tr[1]/td[1]/text()').get() + " - " + name
+
+            elif name == 'foreign':
+                name = stat.xpath('./preceding-sibling::tr[2]/td[1]/text()').get() + " - " + name
 
             for d in dates:
                 key = name + " " + d.xpath('./@data-label').get()
