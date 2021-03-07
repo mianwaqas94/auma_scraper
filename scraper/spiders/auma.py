@@ -78,4 +78,17 @@ class AumaSpider(Spider):
                 key: value
             })
 
+        statistics = response.xpath('//div[contains(@class,"stats-table")]/table/tbody/tr[contains(@class, "level-")]')
+
+        for stat in statistics:
+            name = stat.xpath('./td[contains(@data-label,"Kennzah")]/text()').get()
+            dates = stat.xpath('./td[contains(@data-label,"/")]')
+
+            for d in dates:
+                key = name + " " + d.xpath('./@data-label').get()
+                value = d.xpath('./text()').get()
+                record.update({
+                    key: value
+                })
+
         yield record
