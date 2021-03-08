@@ -110,11 +110,18 @@ class AumaSpider(Spider):
             distance_to_home_json.update({
                 dist.xpath('./text()').get(): dist.xpath('./span/text()').get()
             })
+        economic_sector = response.xpath('//span[text()="Economic sector (%)"]/following-sibling::ul/li')
+        economic_sector_json = {}
 
+        for eco in economic_sector:
+            economic_sector_json.update({
+                eco.xpath('./text()').get(): eco.xpath('./span/text()').get()
+            })
         record.update({
             'exhibitors_profile': exhibitors_profile,
             'proportion_of_trade_visitors': proportion_of_trade_visitors,
-            'distance_to_home': distance_to_home_json
+            'distance_to_home': distance_to_home_json,
+            'economic_sector': economic_sector_json
         })
 
         yield record
