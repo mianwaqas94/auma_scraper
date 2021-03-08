@@ -145,6 +145,24 @@ class AumaSpider(Spider):
                 infl.xpath('./text()').get(): infl.xpath('./span/text()').get()
             })
 
+        size_of_company_organization = response.xpath('//span[text()="Size of company/organization (%)"]/following-sibling::ul/li')
+        size_of_company_organization_json = {}
+
+        for size in size_of_company_organization:
+            size_of_company_organization_json.update({
+                size.xpath('./text()').get(): size.xpath('./span/text()').get()
+            })
+
+        foreign_origin_detail = response.xpath('//span[text()="Foreign origin total (%)"]/following-sibling::ul/li')
+        foreign_origin_detail_json = {}
+
+        for f in foreign_origin_detail:
+            foreign_origin_detail_json.update({
+                f.xpath('./text()').get(): f.xpath('./span/text()').get()
+            })
+
+        foreign_origin_total = response.xpath('//span[text()="Foreign origin total (%)"]/span/text()').get()
+
         record.update({
             'exhibitors_profile': exhibitors_profile,
             'proportion_of_trade_visitors': proportion_of_trade_visitors,
@@ -153,7 +171,10 @@ class AumaSpider(Spider):
             'professional_position': professional_position_json,
             'average_length_of_stay': average_length_of_stay,
             'frequency_of_trade_fair_visit': frequency_of_trade_json,
-            'influence_on_purchasing_procurement_decisions': influence_of_purchasing_json
+            'influence_on_purchasing_procurement_decisions': influence_of_purchasing_json,
+            'size_of_company_organization': size_of_company_organization_json,
+            'foreign_origin_detail': foreign_origin_detail_json,
+            'foreign_origin_total': foreign_origin_total
         })
 
         yield record
