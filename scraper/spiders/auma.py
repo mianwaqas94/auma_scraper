@@ -126,12 +126,34 @@ class AumaSpider(Spider):
                 pro.xpath('./text()').get(): pro.xpath('./span/text()').get()
             })
 
+        average_length_of_stay = response.xpath('//span[text()="Average length of stay (days)"]/following-sibling::p/text()').get()
+
+        frequency_of_trade = response.xpath('(//span[text()="Frequency of trade fair visits (%)"]/following-sibling::ul/li)')
+        frequency_of_trade_json = {}
+
+        for freq in frequency_of_trade:
+            frequency_of_trade_json.update({
+                freq.xpath('./text()').get(): freq.xpath('./span/text()').get()
+            })
+
+        influence_of_purchasing = response.xpath(
+            '//span[text()="Influence on purchasing/procurement decisions (%)"]/following-sibling::ul/li')
+        influence_of_purchasing_json = {}
+
+        for infl in influence_of_purchasing:
+            influence_of_purchasing_json.update({
+                infl.xpath('./text()').get(): infl.xpath('./span/text()').get()
+            })
+
         record.update({
             'exhibitors_profile': exhibitors_profile,
             'proportion_of_trade_visitors': proportion_of_trade_visitors,
             'distance_to_home': distance_to_home_json,
             'economic_sector': economic_sector_json,
-            'professional_position': professional_position_json
+            'professional_position': professional_position_json,
+            'average_length_of_stay': average_length_of_stay,
+            'frequency_of_trade_fair_visit': frequency_of_trade_json,
+            'influence_on_purchasing_procurement_decisions': influence_of_purchasing_json
         })
 
         yield record
