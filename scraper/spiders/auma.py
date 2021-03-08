@@ -33,7 +33,10 @@ class AumaSpider(Spider):
             'url': response.url
         }
 
-        title = response.xpath('//h1[@id="tradeFairTitel"]/text()').get() + " - " + response.xpath('//span[@id="lblTradefairTitleLong"]/text()').get()
+        title = response.xpath('//h1[@id="tradeFairTitel"]/text()').get()
+        long_title = response.xpath('//span[@id="lblTradefairTitleLong"]/text()').get()
+        if long_title:
+            title = title + " - " + long_title
         venue = response.xpath('//article//div[@class="item"]/h4//*[contains(text(),"Venue")]/parent::h4/following-sibling::span/text()').getall()
         dates_all = response.xpath('//article//div[@class="item"]/h4//*[contains(text(),"Dates")]/parent::h4/parent::div//span//text()').getall()
         dates = []
